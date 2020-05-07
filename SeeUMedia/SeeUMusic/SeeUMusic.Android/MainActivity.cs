@@ -15,7 +15,7 @@ using static Android.Webkit.WebChromeClient;
 
 namespace SeeUMusic.Droid
 {
-    [Activity(Label = "SeeUMedia", Icon = "@drawable/music", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.KeyboardHidden | ConfigChanges.Orientation| ConfigChanges.ScreenSize)]
+    [Activity(Label = "SeeUMedia", Icon = "@drawable/music", Theme = "@style/MainTheme",  ConfigurationChanges = ConfigChanges.KeyboardHidden | ConfigChanges.Orientation| ConfigChanges.ScreenSize)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     { 
         public static MainActivity Current { get; private set; }
