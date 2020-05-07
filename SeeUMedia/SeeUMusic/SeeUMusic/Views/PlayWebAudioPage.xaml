@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="SeeUMedia.Views.PlayWebAudioPage"
+             Title="Play web audio">
+    <!--<MediaElement 
+        Source="https://sec.ch9.ms/ch9/94a2/1e1e55c2-8c33-4f2f-8cc0-413e8ae794a2/MemoryManagement.mp3"
+        ShowsPlaybackControls="True" />-->
+    <ContentPage.Content>
+        <StackLayout>
+            <ListView 
+            ItemsSource="{Binding .}"
+            ItemTapped="ListView_ItemTapped"
+                HeightRequest="100"
+                  >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout>
+                                <Label Text="{Binding DisplayName}"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <MediaElement 
+                x:Name="mediaElement"
+                ShowsPlaybackControls="True"
+                HeightRequest="150"
+                WidthRequest="150"
+                BackgroundColor="Azure"/>
+
+            <Label
+                FontSize="18" 
+                HeightRequest="30" 
+                x:Name="lb_CurMusic" 
+                TextColor="OrangeRed"
+                />
+
+        </StackLayout>
+    </ContentPage.Content>
+   
+</ContentPage>
+    

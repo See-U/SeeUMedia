@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<page:PopupPage
+    xmlns:page="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup" xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:SeeUMedia.Views.LoginView"
+             mc:Ignorable="d"
+             x:Class="SeeUMedia.Views.LoginView.LoginPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:MultiTriggerConverter x:Key="dataHasBeenEntered" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <StackLayout  Margin="30,70" BackgroundColor="LightBlue">
+        <StackLayout BackgroundColor="{StaticResource bgColor}" Orientation="Horizontal" >
+            <Label Margin="20,0"  Text="登录" TextColor="White" FontSize="18"  VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+            <Button  Text="×" TextColor="Gray" BackgroundColor="Transparent" Clicked="Button_Clicked" VerticalOptions="Center" FontSize="28" HorizontalOptions="End"/>
+        </StackLayout>
+        <StackLayout>
+            <Image x:Name="loginImage" HorizontalOptions="Center"  />
+            <Label Text="帐号" FontSize="20" />
+            <Entry x:Name="userIDEntry" 
+               Placeholder="输入账号"
+               Text="{Binding Path=LoginInfo.UserAccount}">
+            </Entry>
+            <Label Text="密码"  FontSize="20" />
+            <Entry x:Name="passwordEntry" 
+               Placeholder="输入密码" 
+               IsPassword="True"
+               Text="{Binding Path=LoginInfo.UserPassword}"/>
+            <Button Text="登录" 
+                Command="{Binding LoginCommand}"
+                FontSize="Large"
+                HeightRequest="50" 
+                VerticalOptions="Start"
+                IsEnabled="{Binding LoginBtnIsEnable}"
+                >
+                <Button.Triggers>
+                    <MultiTrigger TargetType="Button">
+                        <MultiTrigger.Conditions>
+                            <BindingCondition
+                                   Binding="{Binding Source={x:Reference userIDEntry},
+                                   Path=Text.Length,
+                                   Converter={StaticResource dataHasBeenEntered}}"
+		                           Value="True" />
+                            <BindingCondition Binding="{Binding Source={x:Reference passwordEntry},
+                                   Path=Text.Length,
+                                   Converter={StaticResource dataHasBeenEntered}}"
+		                           Value="True" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="IsEnabled" Value="True" />
+                        <Setter Property="BackgroundColor" Value="#3897f0" />
+                        <Setter Property="TextColor" Value="White" />
+                    </MultiTrigger>
+                </Button.Triggers>
+            </Button>
+            <Button Text="退出"
+                Command="{Binding LogoutCommand}"
+                FontSize="Large"
+                HeightRequest="50" 
+                VerticalOptions="Start"></Button>
+            <Label x:Name="errorLabel" 
+               Text="{Binding Path=ErrorMsg}" 
+               FontSize="20" 
+               IsVisible="True" 
+               TextColor="Red"
+               />
+
+        </StackLayout>
+    </StackLayout>
+   
+</page:PopupPage>

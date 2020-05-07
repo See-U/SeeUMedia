@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NeteaseCloudMusicApi\NeteaseCloudMusicApi.csproj" />
+    <ProjectReference Include="..\SeeUMusic.Common\SeeUMedia.Common.csproj" />
+    <ProjectReference Include="..\SeeUMusic.Models\SeeUMedia.Models.csproj" />
+  </ItemGroup>
+
+</Project>

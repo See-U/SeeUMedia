@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            xmlns:local="clr-namespace:SeeUMedia.Views.LoginView"
+            xmlns:image="clr-namespace:SeeUMedia.Helpers"
+            xmlns:local1="clr-namespace:SeeUMedia.Views.VideoView"
+            xmlns:local2="clr-namespace:SeeUMedia.Views.AudioView"
+            xmlns:local3="clr-namespace:SeeUMedia.Views.Web"
+            mc:Ignorable="d"
+            x:Class="SeeUMedia.Views.ShellPage">
+  <!--Pages can be added as references or inline-->
+    <!--<Grid ColumnSpacing="0" RowSpacing="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="1"/>
+            <RowDefinition Height="44"/>
+        </Grid.RowDefinitions>
+        <ContentView x:Name="cvContentHolder" Grid.Row="0"/>
+        <BoxView BackgroundColor="#666" Grid.Row="1"/>
+        <Grid ColumnSpacing="0" RowSpacing="0"  BackgroundColor="{StaticResource bgColor}" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackLayout Grid.Column="0" x:Name ="Home_StackLayout">
+                <Image Margin="-5,5" Source="{image:ImageResource SeeUMedia.Images.home.png}" WidthRequest="25" VerticalOptions="Center" />
+                <Label  Margin="5,-10"  FontSize="10" Text="Home"  VerticalOptions="Start" HorizontalOptions="CenterAndExpand" TextColor="White"/>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Home_Tapped"/>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+            <StackLayout Grid.Column="1" >
+                <Image Margin="-5,5" Source="{image:ImageResource SeeUMedia.Images.video.png}" WidthRequest="25" VerticalOptions="Center"/>
+                <Label  Margin="5,-10"  FontSize="10" Text="Video"  VerticalOptions="Start" HorizontalOptions="CenterAndExpand" TextColor="White"></Label>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Video_Tapped"/>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+            <StackLayout Grid.Column="2">
+                <Image Margin="-5,5" Source="{image:ImageResource SeeUMedia.Images.audio.png}" WidthRequest="25" VerticalOptions="Center"/>
+                <Label  Margin="5,-10"  FontSize="10" Text="Audio"  VerticalOptions="Start" HorizontalOptions="CenterAndExpand" TextColor="White"/>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Audio_Tapped"/>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+            <StackLayout Grid.Column="3">
+                <Image Margin="-5,5" Source="{image:ImageResource SeeUMedia.Images.novel.png}" WidthRequest="25" VerticalOptions="Center"/>
+                <Label  Margin="5,-10"  FontSize="10" Text="Novel"  VerticalOptions="Start" HorizontalOptions="CenterAndExpand" TextColor="White"/>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Novel_Tapped"/>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+        </Grid>
+    </Grid>-->
+    <ContentPage IconImageSource="home" Title="Home" >
+        <StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Button Text="登录"  
+                            Command="{Binding NavigateCommand}"
+                            CommandParameter="{x:Type local:LoginPage}"/>
+            </StackLayout>
+            <Label 
+            VerticalOptions="Center" 
+            HorizontalOptions="Center"
+            Text="当前版块正在开发中。。。"/>
+        </StackLayout>
+    </ContentPage>
+    <TabbedPage IconImageSource="audio" Title="Audio" BarBackgroundColor="Red" HeightRequest="13">
+        <local2:MusicPlayer Title="SearchMusic"/>
+        <ContentPage Title="歌单"></ContentPage>
+        <ContentPage Title="歌手"></ContentPage>
+        <ContentPage Title="排行榜"></ContentPage>
+        <local1:VideoPage Title="视频"/>
+    </TabbedPage>
+
+    <local3:IMeiJuWebView IconImageSource="video" Title="Video"/>
+
+    <local3:NovelWebView IconImageSource="novel" Title="Novel"/>
+    <!--<ContentPage IconImageSource="novel" Title="Novel" >
+        <Label 
+            VerticalOptions="Center" 
+            HorizontalOptions="Center"
+            Text="当前版块正在开发中。。。"/>
+    </ContentPage>-->
+</TabbedPage>

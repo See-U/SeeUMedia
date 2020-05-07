@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="SeeUMedia.SeeUMedia" android:installLocation="auto">
+	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="26" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<application android:icon="@drawable/music" android:label="SeeUMedia.Android" android:theme="@style/MainTheme" android:hardwareAccelerated="true"></application>
+</manifest>
