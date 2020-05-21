@@ -1,11 +1,13 @@
 ﻿using Acr.UserDialogs;
 using NeteaseCloudMusicApi;
 using Newtonsoft.Json.Linq;
+using SeeUMedia.Common.Helper;
 using SeeUMedia.Models;
 using SeeUMedia.Models.SongModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -28,14 +30,35 @@ namespace SeeUMedia.ViewModels.SongVM
             PauseCmd = new Command<object>(PauseHandler);
             PreviousCmd = new Command(PreviousHandler);
             NextCmd = new Command(NextHandler);
+            ItemTappedCmd = new Command(SongsLsvt_ItemTappedHandler);
             CurMediaInfo = new MediaInfo();
             MediaElement.MediaFailed += MediaElement_MediaFailed;
+            MediaElement.MediaOpened += MediaElement_MediaOpened;
         }
 
         private void MediaElement_MediaFailed(object sender, EventArgs e)
         {
             MediaElement.Stop();
-            IsPlay = false;
+            //IsPlay = false;
+        }
+
+        private void MediaElement_MediaOpened(object sender, EventArgs e)
+        {
+            TaskAsyncHelper.RunAsync(new Action(() =>
+            {
+                while (true)
+                {
+                    if (MediaElement.CurrentState == MediaElementState.Playing)
+                    {
+                        IsPlay = true;
+                    }
+                    else
+                    {
+                        IsPlay = false;
+                    }
+                    Thread.Sleep(100);
+                }
+            }), null);
         }
 
         // ICommand implementations
@@ -43,8 +66,8 @@ namespace SeeUMedia.ViewModels.SongVM
         public ICommand PauseCmd { protected set; get; }
         public ICommand PreviousCmd { protected set; get; }
         public ICommand NextCmd { protected set; get; }
-
-
+        //public override ICommand ItemTappedCmd { set; get; }
+        
         /// <summary>
         /// SearchMusic
         /// </summary>
@@ -168,6 +191,14 @@ namespace SeeUMedia.ViewModels.SongVM
         /// <param name="obj"></param>
         public void PlayHandler(object obj)
         {
+            if (MediaElement.CurrentState != MediaElementState.Playing)
+            {
+                MediaElement.Play();
+            }
+        }
+
+        public void SongsLsvt_ItemTappedHandler(object obj)
+        {
             try
             {
                 if (obj != null)
@@ -175,25 +206,22 @@ namespace SeeUMedia.ViewModels.SongVM
                     var item = obj as Song;
                     MediaElement.Source = GetSourceById(item.id);
                     MediaElement.Play();
-                    IsPlay = true;
                     CurMediaInfo.DisplayName = item.name;
                     CurMediaInfo.Artist = item.artists[0].name;
                 }
                 else if (MediaElement.Source != null)
                 {
                     MediaElement.Play();
-                    IsPlay = true;
                 }
                 else
                 {
                     UserDialogs.Instance.Toast("未选择需要播放的歌曲！");
                 }
             }
-            catch (Exception ex )
+            catch (Exception ex)
             {
                 UserDialogs.Instance.Toast(ex.ToString());
             }
-            
         }
 
         /// <summary>
@@ -202,13 +230,9 @@ namespace SeeUMedia.ViewModels.SongVM
         /// <param name="obj"></param>
         public void PauseHandler(object obj)
         {
-            var item = obj as Song;
-            var state = MediaElement.CurrentState;
-            if (state != MediaElementState.Paused)
+            if (MediaElement.CurrentState == MediaElementState.Playing)
             {
                 MediaElement.Pause();
-                IsPlay = false;
-                state = MediaElement.CurrentState;
             }
         }
 
@@ -293,6 +317,8 @@ namespace SeeUMedia.ViewModels.SongVM
                             if (mediaSource.Contains(item.id.ToString()))
                             {
                                 MediaElement.Stop();
+                                IsPlay = false;
+
                                 int curItemId = SongLst.IndexOf(item);
                                 if (SongLst.Count > curItemId)
                                 {

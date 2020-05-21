@@ -14,7 +14,7 @@
                 <ImageButton Source="{local:ImageResource SeeUMedia.Images.refresh.png}" HeightRequest="60" HorizontalOptions="CenterAndExpand" Clicked="refreshClicked"  BackgroundColor="Snow"/>
                 <ImageButton Source="{local:ImageResource SeeUMedia.Images.forward.png}" HeightRequest="60"  HorizontalOptions="EndAndExpand" Clicked="forwardClicked"  BackgroundColor="Snow" />
             </StackLayout>
-            <WebView android:WebView.MixedContentMode="CompatibilityMode" android:WebView.EnableZoomControls="True" android:WebView.DisplayZoomControls="True"  WidthRequest="1000" HeightRequest="1000" x:Name="Browser" />
+            <WebView android:WebView.MixedContentMode="AlwaysAllow" android:WebView.EnableZoomControls="True" android:WebView.DisplayZoomControls="True"  WidthRequest="1000" HeightRequest="1000" x:Name="Browser"/>
         </StackLayout>
        
     </ContentPage.Content>

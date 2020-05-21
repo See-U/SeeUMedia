@@ -74,7 +74,7 @@ namespace SeeUMedia.Models.SongModel
         /// <summary>
         /// mark
         /// </summary>
-        public int mark { get; set; }
+        public string mark { get; set; }
     }
 }
 

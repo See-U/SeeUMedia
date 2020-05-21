@@ -15,12 +15,15 @@ using static Android.Webkit.WebChromeClient;
 
 namespace SeeUMusic.Droid
 {
-    [Activity(Label = "SeeUMedia", Icon = "@drawable/music", Theme = "@style/MainTheme",  ConfigurationChanges = ConfigChanges.KeyboardHidden | ConfigChanges.Orientation| ConfigChanges.ScreenSize)]
+    [Activity(Label = "SeeUMedia", Icon = "@drawable/music", Theme = "@style/MainTheme")]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     { 
         public static MainActivity Current { get; private set; }
         public static readonly int PickImageId = 1000;
         public TaskCompletionSource<string> PickImageTaskCompletionSource { get; set; }
+        private static FrameLayout mLayout;    // 用来显示视频的布局
+        private static View mCustomView;   //用于全屏渲染视频的View
+        private static WebChromeClient.ICustomViewCallback mCustomViewCallback;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -29,6 +32,17 @@ namespace SeeUMusic.Droid
 
             Current = this;
             base.OnCreate(savedInstanceState);
+
+            ////Remove title bar
+            //RequestWindowFeature(WindowFeatures.NoTitle);
+            ////Remove notification bar
+            //Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
+            //SetContentView(Resource.Layout.RelativeLayout);
+            //mLayout = (FrameLayout)FindViewById(Resource.Id.fl_video);
+            //WebView webView = (WebView)FindViewById(Resource.Id.wv_content);
+            //webView.LoadUrl("https://www.iqiyi.com/");
+            //webView.SetWebChromeClient(new CustomWebViewChromeClient());
+
             //注册未处理异常事件
             AndroidEnvironment.UnhandledExceptionRaiser += AndroidEnvironment_UnhandledExceptionRaiser;
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
@@ -139,5 +153,52 @@ namespace SeeUMusic.Droid
         }
 
         #endregion
+
+        private class CustomWebViewChromeClient: WebChromeClient
+        {
+            public void onShowCustomView(View view, ICustomViewCallback callback)
+            {
+                base.OnShowCustomView(view, callback);
+                //如果view 已经存在，则隐藏
+                if (mCustomView != null)
+                {
+                    callback.OnCustomViewHidden();
+                    return;
+                }
+
+                mCustomView = view;
+                mCustomView.Visibility = ViewStates.Visible;
+                mCustomViewCallback = callback;
+                mLayout.AddView(mCustomView);
+                mLayout.Visibility = ViewStates.Visible;
+                mLayout.BringToFront();
+
+                ////设置横屏
+                //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            }
+
+            public override void OnHideCustomView()
+            {
+                base.OnHideCustomView();
+                if (mCustomView == null)
+                {
+                    return;
+                }
+                mCustomView.Visibility = ViewStates.Gone;
+                mLayout.RemoveView(mCustomView);
+                mCustomView = null;
+                mLayout.Visibility = ViewStates.Gone;
+                try
+                {
+                    mCustomViewCallback.OnCustomViewHidden();
+                }
+                catch (Exception ex)
+                {
+                }
+                // titleView.setVisibility(View.VISIBLE);
+               // setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//竖屏
+            }
+        }
+
     }
 }

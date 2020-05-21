@@ -8,7 +8,9 @@
             xmlns:local1="clr-namespace:SeeUMedia.Views.VideoView"
             xmlns:local2="clr-namespace:SeeUMedia.Views.AudioView"
             xmlns:local3="clr-namespace:SeeUMedia.Views.Web"
+            xmlns:local4="clr-namespace:SeeUMedia.Views"
             mc:Ignorable="d"
+            NavigationPage.HasNavigationBar="False"
             x:Class="SeeUMedia.Views.ShellPage">
   <!--Pages can be added as references or inline-->
     <!--<Grid ColumnSpacing="0" RowSpacing="0">
@@ -63,6 +65,7 @@
                             Command="{Binding NavigateCommand}"
                             CommandParameter="{x:Type local:LoginPage}"/>
             </StackLayout>
+            <Button Text="体验" Clicked="Button_Clicked"></Button>
             <Label 
             VerticalOptions="Center" 
             HorizontalOptions="Center"
@@ -80,6 +83,7 @@
     <local3:IMeiJuWebView IconImageSource="video" Title="Video"/>
 
     <local3:NovelWebView IconImageSource="novel" Title="Novel"/>
+    <!--<local4:CustomPositionBarPage Title="Position"/>-->
     <!--<ContentPage IconImageSource="novel" Title="Novel" >
         <Label 
             VerticalOptions="Center" 

@@ -35,6 +35,11 @@ namespace SeeUMedia.Views
 
 		}
 
+		private async void Button_Clicked(object sender, EventArgs e)
+		{
+			await Navigation.PushAsync(new Page());
+		}
+
 		//private void Home_Tapped(object sender, EventArgs e)
 		//{
 		//	cvContentHolder.Content = new MusicPlayer();

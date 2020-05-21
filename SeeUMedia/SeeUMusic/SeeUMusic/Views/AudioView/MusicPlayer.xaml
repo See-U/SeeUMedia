@@ -4,6 +4,8 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
+             xmlns:behaviors="clr-namespace:SeeUMedia.Common.Core.Behaviors;assembly=SeeUMedia.Common" 
+             xmlns:video="clr-namespace:SeeUMedia.Controls"
              x:Class="SeeUMedia.Views.AudioView.MusicPlayer">
     <StackLayout>
         <StackLayout Orientation="Horizontal">
@@ -18,6 +20,12 @@
                           ItemsSource="{Binding SongLst}"
                           SeparatorColor="LightBlue"
                           SeparatorVisibility="Default">
+            <ListView.Behaviors>
+                <behaviors:EventToCommandBehavior
+										EventName="ItemTapped"
+										EventArgsConverter="{StaticResource ItemTappedEventArgsConverter}"
+										Command="{Binding ItemTappedCmd}" />
+            </ListView.Behaviors>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
@@ -31,76 +39,96 @@
         </ListView>
         <StackLayout BackgroundColor="LightGray">
             <StackLayout  Margin="0,3" Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
-                <Label Text="{Binding CurMediaInfo.DisplayName}" FontSize="25" FontAttributes="Bold"/>
-                <Label Text="{Binding CurMediaInfo.Artist,TargetNullValue='',StringFormat ='-- {0}'}" VerticalOptions="CenterAndExpand" FontSize="15"/>
+                <Label Text="{Binding CurMediaInfo.DisplayName}" FontSize="15" FontAttributes="Bold"/>
+                <Label Text="{Binding CurMediaInfo.Artist,TargetNullValue='',StringFormat ='-- {0}'}" VerticalOptions="CenterAndExpand" FontSize="10"/>
             </StackLayout>
-            <StackLayout WidthRequest="300" Orientation="Horizontal"  HorizontalOptions="CenterAndExpand">
+            <StackLayout WidthRequest="300" Orientation="Horizontal"  HorizontalOptions="CenterAndExpand" >
                 <ImageButton x:Name="bt_Previous"
                                      BackgroundColor="Transparent"
                                      Source="previous"
-                                     WidthRequest="30" 
-                                     HeightRequest="30" 
+                                     WidthRequest="25" 
+                                     HeightRequest="25" 
                                      Command="{Binding PreviousCmd}" 
-                                     Margin="35,5"/>
+                                     Margin="35,3"/>
                 <ImageButton x:Name="bt_play"
                                      Source="play" 
                                      CornerRadius="50"
-                                     HeightRequest="45"
+                                     HeightRequest="35"
+                                     WidthRequest="35"
                                      HorizontalOptions="Center"
                                      VerticalOptions="CenterAndExpand"
                                      Padding="2"
                                      BackgroundColor="White"
-                                     Margin="25,5"
+                                     Margin="25,3"
                                      Command="{Binding PlayCmd}" 
                                      CommandParameter="{Binding SelectedItem,Source={x:Reference SongsLsvt}}">
-                    <ImageButton.Triggers>
-                        <DataTrigger TargetType="ImageButton" Binding="{Binding IsPlay}" Value="True">
+                    <ImageButton.Triggers >
+                        <DataTrigger TargetType="ImageButton"  Binding="{Binding IsPlay}" Value="True">
                             <Setter Property="IsVisible"  Value="False" ></Setter>
                         </DataTrigger>
-                        <DataTrigger TargetType="ImageButton" Binding="{Binding IsPlay}" Value="False">
+                        <!--<DataTrigger TargetType="ImageButton" Binding="{Binding IsPlay}" Value="False">
                             <Setter Property="IsVisible"  Value="True" ></Setter>
-                        </DataTrigger>
+                        </DataTrigger>-->
                     </ImageButton.Triggers>
                 </ImageButton>
                 <ImageButton x:Name="bt_Pause" 
                                      Source="pause" 
-                                     CornerRadius="100"
-                                     HeightRequest="45"
+                                     CornerRadius="50"
+                                     HeightRequest="35"
+                                     WidthRequest="35"
                                      BackgroundColor="White"
                                      HorizontalOptions="Center"
                                      VerticalOptions="CenterAndExpand"
-                                    Margin="25,5"
+                                    Margin="25,3"
                                     Command="{Binding PauseCmd}">
                     <ImageButton.Triggers>
                         <DataTrigger TargetType="ImageButton" Binding="{Binding IsPlay}" Value="False">
                             <Setter Property="IsVisible"  Value="False" ></Setter>
                         </DataTrigger>
-                        <DataTrigger TargetType="ImageButton" Binding="{Binding IsPlay}" Value="True">
+                        <!--<DataTrigger TargetType="ImageButton" Binding="{Binding IsPlay}" Value="True">
                             <Setter Property="IsVisible"  Value="True" ></Setter>
-                        </DataTrigger>
+                        </DataTrigger>-->
                     </ImageButton.Triggers>
                 </ImageButton>
                 <ImageButton x:Name="bt_Next" 
                                      Source="next" 
                                      BackgroundColor="Transparent"
-                                     WidthRequest="30" 
-                                     HeightRequest="30"
-                                     Margin="35,5"
+                                     WidthRequest="25" 
+                                     HeightRequest="25"
+                                     Margin="35,3"
                                      Command="{Binding NextCmd}"/>
-                <!--<Button Text="&#x25B6;&#xFE0F;"  FontSize="30" CornerRadius="50"></Button>-->
-                <MediaElement x:Name="mediaElement"
+            </StackLayout>
+            <StackLayout.GestureRecognizers>
+                <TapGestureRecognizer Tapped="CurMusic_Tapped" />
+            </StackLayout.GestureRecognizers>
+        </StackLayout>
+        <StackLayout >
+            <video:PositionSlider x:Name="positionSlider" BindingContext="{x:Reference mediaElement}"
+                                  Position="{Binding Position}"
+                                  MaximumTrackColor="Green"
+                                  MinimumTrackColor="Purple"
+                                  DragCompleted="positionSlider_DragCompleted">
+                <video:PositionSlider.Triggers>
+                    <DataTrigger TargetType="video:PositionSlider" 
+                             Binding="{Binding Status}"
+                             Value="{x:Static video:VideoStatus.NotReady}">
+                        <Setter Property="IsEnabled" Value="False" />
+                    </DataTrigger>
+                </video:PositionSlider.Triggers>
+            </video:PositionSlider>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal" Margin="10,0">
+            <Label BindingContext="{x:Reference mediaElement}" Text="{Binding Duration,StringFormat='{}{0:hh\\:mm\\:ss}',TargetNullValue='00:00:00'}" />
+            <Label x:Name="positionLabel" 
+                   Text="00:00:00" 
+                   HorizontalOptions="EndAndExpand"/>
+        </StackLayout>
+        <MediaElement x:Name="mediaElement"
                                   Opacity="0.01"
                                   InputTransparent="True"
                                   ShowsPlaybackControls="False"
                                   HeightRequest="1"
                                   WidthRequest="1"
                                   BackgroundColor="Azure"/>
-            </StackLayout>
-            <Slider Value="{Binding MediaElement.Position}"></Slider>
-            <Label  Text="{Binding MediaElement.Position}"></Label>
-            <StackLayout.GestureRecognizers>
-                <TapGestureRecognizer Tapped="CurMusic_Tapped" />
-            </StackLayout.GestureRecognizers>
-        </StackLayout>
     </StackLayout>
 </ContentPage>

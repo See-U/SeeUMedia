@@ -16,7 +16,7 @@ namespace SeeUMedia
         {
             //await FileAccess.CopyVideoIfNotExists("XamarinForms101UsingEmbeddedImages.mp4");
             //MainPage = new NavigationPage(new MainPage());
-            MainPage = new ShellPage();
+            MainPage = new NavigationPage(new ShellPage());
         }
 
         protected override void OnSleep()

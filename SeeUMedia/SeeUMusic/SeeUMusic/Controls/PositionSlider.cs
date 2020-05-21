@@ -25,12 +25,6 @@ namespace SeeUMedia.Controls
         public static readonly BindableProperty PositionProperty =
             BindableProperty.Create(nameof(Position), typeof(TimeSpan), typeof(PositionSlider), new TimeSpan(0),
                                     propertyChanged: (bindable, oldValue, newValue) => ((PositionSlider)bindable).SetTimeToEnd());
-        //defaultBindingMode: BindingMode.TwoWay);
-        //propertyChanged: (bindable, oldValue, newValue) =>
-        //{
-        //    double seconds = ((TimeSpan)newValue).TotalSeconds;
-        //    ((Slider)bindable).Value = seconds;
-        //});
 
         public TimeSpan Position
         {
