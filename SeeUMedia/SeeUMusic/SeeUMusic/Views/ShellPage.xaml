@@ -77,7 +77,6 @@
         <ContentPage Title="歌单"></ContentPage>
         <ContentPage Title="歌手"></ContentPage>
         <ContentPage Title="排行榜"></ContentPage>
-        <local1:VideoPage Title="视频"/>
     </TabbedPage>
 
     <local3:IMeiJuWebView IconImageSource="video" Title="Video"/>

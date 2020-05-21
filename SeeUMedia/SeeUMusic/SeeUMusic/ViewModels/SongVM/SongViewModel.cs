@@ -34,6 +34,7 @@ namespace SeeUMedia.ViewModels.SongVM
             CurMediaInfo = new MediaInfo();
             MediaElement.MediaFailed += MediaElement_MediaFailed;
             MediaElement.MediaOpened += MediaElement_MediaOpened;
+            SearchItemCmd.Execute("流行");
         }
 
         private void MediaElement_MediaFailed(object sender, EventArgs e)

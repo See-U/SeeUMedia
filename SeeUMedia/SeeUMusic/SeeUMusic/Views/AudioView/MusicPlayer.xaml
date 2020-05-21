@@ -104,9 +104,11 @@
         </StackLayout>
         <StackLayout >
             <video:PositionSlider x:Name="positionSlider" BindingContext="{x:Reference mediaElement}"
+                                  Duration="{Binding Duration}"
                                   Position="{Binding Position}"
                                   MaximumTrackColor="Green"
                                   MinimumTrackColor="Purple"
+                                  DragStarted="positionSlider_DragStarted"
                                   DragCompleted="positionSlider_DragCompleted">
                 <video:PositionSlider.Triggers>
                     <DataTrigger TargetType="video:PositionSlider" 

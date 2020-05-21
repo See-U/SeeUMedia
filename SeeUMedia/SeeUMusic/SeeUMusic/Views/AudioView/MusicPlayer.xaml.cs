@@ -20,20 +20,21 @@ namespace SeeUMedia.Views.AudioView
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
-            Device.StartTimer(TimeSpan.FromMilliseconds(1000), () =>
+            polling = true;
+            Device.StartTimer(TimeSpan.FromMilliseconds(100), () =>
             {
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     if (mediaElement.CurrentState == MediaElementState.Playing)
                     {
-                        positionSlider.Maximum = Convert.ToDouble(mediaElement.Duration?.TotalHours.ToString());
+                        positionSlider.Maximum = Convert.ToDouble(mediaElement.Duration?.TotalSeconds.ToString());
                         positionLabel.Text = mediaElement.Position.ToString("hh\\:mm\\:ss");
-                        positionSlider.Value = mediaElement.Position.TotalHours;
+                        positionSlider.Value = mediaElement.Position.TotalSeconds;
                     }
                 });
                 return polling;
             });
+
         }
 
         protected override void OnDisappearing()
@@ -61,15 +62,24 @@ namespace SeeUMedia.Views.AudioView
             {
                 mediaElement.Pause();
             }
-            mediaElement.Position = TimeSpan.FromHours(positionSlider.Value); ;
+            mediaElement.Position = TimeSpan.FromSeconds(positionSlider.Value); ;
             mediaElement.Play();
             positionLabel.Text = mediaElement.Position.ToString("hh\\:mm\\:ss");
         }
 
         private void positionSlider_DragCompleted(object sender, EventArgs e)
         {
-            mediaElement.Position = TimeSpan.FromHours(positionSlider.Value);
+            mediaElement.Position = mediaElement.Position + TimeSpan.FromSeconds(1000);
             positionLabel.Text = mediaElement.Position.ToString("hh\\:mm\\:ss");
+            mediaElement.Play();
+        }
+
+        private void positionSlider_DragStarted(object sender, EventArgs e)
+        {
+            if (mediaElement.CurrentState == MediaElementState.Playing)
+            {
+                mediaElement.Pause();
+            }
         }
     }
 }
